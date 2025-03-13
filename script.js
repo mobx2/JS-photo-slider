@@ -9,9 +9,6 @@ var slidesCount = sliderImages.length;
 // Set current slide index
 var currentIndex = 1;
 
-// Slide Number Element
-var slideNumberElement = document.getElementById("slide-number");
-
 // Previous and next button
 var nextButton = document.getElementById("next");
 var prevButton = document.getElementById("prev");
@@ -26,7 +23,7 @@ var sliderContainer = document.querySelector(".slider-container");
 // Create slide number
 var sliderNumber = document.createElement("div");
 sliderNumber.classList.add("slide-number");
-sliderNumber.innerHTML = `Slide ${currentIndex} From ${slidesCount}`;
+sliderNumber.innerHTML = `Slide #${currentIndex} of ${slidesCount}`;
 
 // Append slide number to slider container
 sliderContainer.prepend(sliderNumber);
@@ -34,15 +31,18 @@ sliderContainer.prepend(sliderNumber);
 // Create indicators ul
 var indicatorsUl = document.createElement("ul");
 
-// Create indicators li
 for (let i = 1; i <= slidesCount; i++) {
   var indicatorsLi = document.createElement("li");
 
   indicatorsLi.innerHTML = i;
+
   indicatorsLi.setAttribute(`data-index`, i);
   indicatorsUl.appendChild(indicatorsLi);
   document.body.appendChild(indicatorsUl);
+  indicatorsUl.children[0].classList.add("active");
 }
+
+var liArr = Array.from(indicatorsUl.children);
 
 // Get indicators and append ul into it
 var indecatior = document.getElementById("indecatior");
@@ -50,7 +50,7 @@ indecatior.appendChild(indicatorsUl);
 
 // Next slide function
 function nextSlide() {
-  if (currentIndex > slidesCount) {
+  if (currentIndex === slidesCount) {
     return false;
   } else {
     sliderImages.forEach((img) => {
@@ -58,12 +58,13 @@ function nextSlide() {
     });
     currentIndex++;
     sliderImages[currentIndex - 1].classList.add("active");
+    theChecker();
   }
 }
 
 // Previous slide function
 function privSlide() {
-  if (currentIndex + 1 < 1) {
+  if (currentIndex === 1) {
     return false;
   } else {
     sliderImages.forEach((img) => {
@@ -71,6 +72,7 @@ function privSlide() {
     });
     currentIndex--;
     sliderImages[currentIndex - 1].classList.add("active");
+    theChecker();
   }
 }
 
@@ -78,11 +80,17 @@ function privSlide() {
 function theChecker() {
   // Set the slide number
 
-  slideNumberElement.textContent = `Slide #${currentIndex} of ${slidesCount}`;
+  sliderNumber.textContent = `Slide #${currentIndex} of ${slidesCount}`;
 
-  // set active class to current li
+  // remove active class from all lis
+  liArr.forEach((li) => {
+    li.classList.remove("active");
 
-  indicatorsUl.children[currentIndex - 1].classList.add("active");
+    // add active class for current element
+    liArr[currentIndex - 1].classList.add("active");
+  });
 }
 
-theChecker();
+// Bullets click function
+
+
